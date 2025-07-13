@@ -1,0 +1,197 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% trans "User Settings - LCPE" %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #e6f0ff, #f0f7ff);
+      color: #2a3e62;
+    }
+
+    header {
+      background: #b8d1ff;
+      color: #1c2a4a;
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 40px auto;
+      display: flex;
+      gap: 40px;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .column {
+      flex: 1;
+      padding: 10px 20px;
+    }
+
+    .divider {
+      width: 2px;
+      background-color: #d4e1ff;
+      border-radius: 2px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #4a7eff;
+    }
+
+    h3 {
+      margin-top: 40px;
+      font-size: 18px;
+      color: #3b4d84;
+    }
+
+    .description {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .button-group a {
+      padding: 10px 15px;
+      background-color: #4a7eff;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      text-align: center;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+
+    .button-group a:hover {
+      background-color: #335edc;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      background: #b8d1ff;
+      color: #1c2a4a;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .divider {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    {% include 'header.html' %}
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="column">
+        <h2>{% trans "User Settings" %}</h2>
+        <p class="description">
+          {% trans "Manage your main account settings to customize the app for yourself. Set preferred units and notifications." %}
+        </p>
+
+        <h3>{% trans "Personalization" %}</h3>
+        <p class="description">
+          {% trans "Configure your diary, choose preferred units and data display formats for maximum comfort." %}
+        </p>
+
+        <div class="button-group">
+          <a href="/diary/settings">{% trans "Diary settings" %}</a>
+          <a href="Units_and_formats">{% trans "Units and formats" %}</a>
+          <a href="formula">{% trans "Formula" %}</a>
+        </div>
+
+        <h3>{% trans "Notifications and Language" %}</h3>
+        <p class="description">
+          {% trans "Control which notifications you want to receive and select the interface language along with the correct time zone." %}
+        </p>
+
+        <div class="button-group">
+          <a href="notification_preferences">{% trans "Notification preferences" %}</a>
+          <a href="language_and_timezone">{% trans "Language & time zone" %}</a>
+        </div>
+
+
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="column">
+        <h2>{% trans "My Content" %}</h2>
+        <p class="description">
+          {% trans "Manage your personal content—from foods and recipes to exercises and goals to accurately track progress." %}
+        </p>
+
+        <h3>{% trans "Nutrition" %}</h3>
+        <p class="description">
+          {% trans "Add and edit foods and recipes to keep an accurate food diary tailored to your needs." %}
+        </p>
+
+        <div class="button-group">
+          <a href="/content/my_foods">{% trans "My foods" %}</a>
+          <a href="/content/my_recipes">{% trans "My recipes" %}</a>
+        </div>
+
+        <h3>{% trans "Activity and Goals" %}</h3>
+        <p class="description">
+          {% trans "Manage your workouts, set goals, and track your progress towards a healthier lifestyle." %}
+        </p>
+
+        <div class="button-group">
+          <a href="/content/my_exercises">{% trans "My exercises" %}</a>
+          <a href="/content/my_goals">{% trans "My goals" %}</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+     <div class="container">
+          <p>© 2025 {% trans "LCPE Web App. All rights reserved." %}</p>
+     </div>
+  </footer>
+</body>
+</html>

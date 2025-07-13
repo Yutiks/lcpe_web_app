@@ -1,0 +1,62 @@
+{% load content_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add Food</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .btn.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<header style="background: #f8f9fa; padding: 10px 20px; border-bottom: 1px solid #ddd;">
+    <nav class="d-flex justify-content-start gap-3">
+        <a href="?tab=my_food&search={{ request.GET.search }}&date={{ request.GET.date }}" class="btn btn-outline-primary {% if tab == 'my_food' %}active{% endif %}">My Food</a>
+        <a href="?tab=my_recipes&search={{ request.GET.search }}&date={{ request.GET.date }}" class="btn btn-outline-primary {% if tab == 'my_recipes' %}active{% endif %}">My Recipes</a>
+        <a href="?tab=library&search={{ request.GET.search }}&date={{ request.GET.date }}" class="btn btn-outline-primary {% if tab == 'library' %}active{% endif %}">Library</a>
+    </nav>
+</header>
+
+<div class="container mt-4">
+
+    <form method="get" action="">
+        <input type="hidden" name="tab" value="{{ tab }}">
+        <input type="text" name="search" class="form-control" placeholder="Search food..." value="{{ request.GET.search }}">
+    </form>
+
+       <form method="post" action="{% url 'add_food_to_entry' entry_id=entry_id %}">
+            {% csrf_token %}
+            <input type="hidden" name="tab" value="{{ tab }}">
+            <input type="hidden" name="search" value="{{ query }}">
+            <input type="hidden" name="date" value="{{ date }}">
+            <ul class="list-group mt-3">
+                {% for item in results %}
+                    {% if item.description %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'food_detail' item.id %}" class="text-decoration-none">
+                                {{ item.description }}
+                            </a>
+                            <button type="submit"
+                                    name="add_item"
+                                    class="btn btn-sm btn-success"
+                                    value="{{ item.id }}-{{ item|content_type_id }}">
+                                ➕
+                            </button>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-muted">{{ item.description }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </form>
+
+</div>
+
+</body>
+</html>

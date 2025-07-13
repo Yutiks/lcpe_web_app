@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Django
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+media/
+staticfiles/
+local_settings.py
+migrations/**/__pycache__/
+**/migrations/*.pyc
+
+# ENV / Secrets
+.env
+.env.*
+*.env
+venv/
+
+# PyCharm
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Railway build output
+build/
+
+**/*secrets*.*
+**/*token*.*

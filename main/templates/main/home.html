@@ -1,0 +1,199 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "LCPE Web App" %}</title>
+    <link rel="icon" href="{% static 'images/favicon.PNG' %}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+    <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background: linear-gradient(to right, #e6f0ff, #f0f7ff);
+        color: #2a3e62;
+    }
+
+    header, footer {
+        background: #b8d1ff;
+        color: #1c2a4a;
+        padding: 20px 0;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .container {
+        width: 90%;
+        max-width: 960px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+        color: #4a7eff;
+    }
+
+    h2 {
+        color: #6a8cff;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    .results ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .results li {
+        padding: 8px 0;
+        border-bottom: 1px solid #d4e1ff;
+    }
+
+    .macros-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: flex-start;
+    }
+
+    .macros-data {
+        flex: 1;
+        min-width: 250px;
+        font-size: 1rem;
+        color: #344d88;
+    }
+
+    .chart-container {
+        flex: 1;
+        max-width: 300px;
+    }
+
+    .macros-canvas {
+        width: 100%;
+    }
+
+    .diet-form {
+        margin-top: 20px;
+    }
+
+    select {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #b8d1ff;
+        font-size: 1rem;
+        margin-top: 8px;
+        background-color: #f5faff;
+        color: #1c2a4a;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #6a8cff;
+        box-shadow: 0 0 0 3px rgba(106, 140, 255, 0.3);
+    }
+
+    .error {
+        background: #fff5f5;
+        color: #a83232;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    footer p {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(20px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    @media (max-width: 768px) {
+        .macros-wrapper {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+</style>
+</head>
+<body>
+    <header>
+        {% include 'header.html' %}
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>{% trans "Welcome to the LCPE Web App" %}</h1>
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% else %}
+                <section class="results">
+                    <h2>{% trans "Your Personal Stats" %}</h2>
+                    <ul>
+                        <li><strong>{% trans "Basal Metabolic Rate" %}:</strong> {{ bmr }} {{ energy_unit_label }}</li>
+                        <li><strong>{% trans "Body Mass Index" %}:</strong> {{ bmi }}</li>
+                        <li><strong>{% trans "Water Requirement" %}:</strong> {{ water }} {{ water_unit_label }}</li>
+                    </ul>
+                </section>
+
+                <section class="macros">
+                    <h2>{% trans "Macronutrient Breakdown" %}</h2>
+                    <div class="macros-wrapper">
+                        <div class="macros-data">
+                            <p><strong>{% trans "Carbohydrate" %}</strong>: {{ carbs_g }} g ({{ carbs_energy }} {{ energy_unit_label }})</p>
+                            <p><strong>{% trans "Protein" %}</strong>: {{ protein_g }} g ({{ protein_energy }} {{ energy_unit_label }})</p>
+                            <p><strong>{% trans "Fat" %}</strong>: {{ fat_g }} g ({{ fat_energy }} {{ energy_unit_label }})</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="macrosChart"
+                                class="macros-canvas"
+                                data-carbs="{{ carbs_energy }}"
+                                data-protein="{{ protein_energy }}"
+                                data-fat="{{ fat_energy }}"></canvas>
+                        </div>
+                    </div>
+
+                    <form method="POST" class="diet-form">
+                        {% csrf_token %}
+                        <label for="diet_type"><strong>{% trans "Select Diet Type" %}</strong></label>
+                        <select name="diet_type" id="diet_type" onchange="this.form.submit()">
+                            <option value="standard" {% if diet_type == "standard" %}selected{% endif %}>Standard</option>
+                            <option value="balanced" {% if diet_type == "balanced" %}selected{% endif %}>Balanced</option>
+                            <option value="lowfat" {% if diet_type == "lowfat" %}selected{% endif %}>Low Fat</option>
+                            <option value="highprotein" {% if diet_type == "highprotein" %}selected{% endif %}>High in Protein</option>
+                            <option value="keto" {% if diet_type == "keto" %}selected{% endif %}>Ketogenic</option>
+                            <option value="custom" {% if diet_type == "custom" %}selected{% endif %}>Custom (coming soon)</option>
+                        </select>
+                    </form>
+                </section>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="{% static 'js/macros_chart.js' %}"></script>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 {% trans "LCPE Web App. All rights reserved." %}</p>
+        </div>
+    </footer>
+</body>
+</html>

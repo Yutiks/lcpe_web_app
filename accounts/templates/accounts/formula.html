@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block title %}{% trans "Formula" %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="formula-container">
+    <h2>{% trans "Formula" %}</h2>
+
+    <p class="formula-description">
+        {% trans "Select the formula to use for calculating your basal metabolic rate (BMR)." %}
+        {% trans "We recommend using the Mifflin-St Jeor formula, as it is considered the most accurate for the general population." %}
+    </p>
+
+    <form method="post" id="formula-form">
+        {% csrf_token %}
+        <label for="formula">
+            {% trans "Choose formula" %}:
+        </label>
+        <select name="formula" id="formula">
+            {% for key, label in formulas.items %}
+                <option value="{{ key }}" {% if selected_formula == key %}selected{% endif %}>
+                    {% trans label %}
+                </option>
+            {% endfor %}
+        </select>
+
+        <div id="fat-percentage-wrapper" style="display: none; margin-top: 1em;">
+            <label for="fat-percentage">{% trans "Enter fat percentage" %}:</label>
+            <input type="number" step="0.1" min="0" max="100"
+                   name="fat_percentage"
+                   id="fat-percentage"
+                   value="{{ fat_percentage|default:'' }}">
+        </div>
+
+        <div class="form-buttons" style="margin-top: 1em;">
+            <button type="submit" class="btn-save" id="save-button">{% trans "Save" %}</button>
+        </div>
+    </form>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const formulaSelect = document.getElementById("formula");
+        const fatWrapper = document.getElementById("fat-percentage-wrapper");
+        const fatInput = document.getElementById("fat-percentage");
+        const saveButton = document.getElementById("save-button");
+
+        function toggleFatField() {
+            const selectedFormula = formulaSelect.value;
+            const isKatch = selectedFormula === "katch_mcardle";
+
+            fatWrapper.style.display = isKatch ? "block" : "none";
+            fatInput.required = isKatch;
+
+            if (isKatch) {
+                validateFatInput();
+            } else {
+                saveButton.disabled = false;
+            }
+        }
+
+        function validateFatInput() {
+            const value = fatInput.value.trim();
+            saveButton.disabled = value === "";
+        }
+
+        formulaSelect.addEventListener("change", toggleFatField);
+        fatInput.addEventListener("input", validateFatInput);
+
+        toggleFatField();
+    });
+    </script>
+</div>
+{% endblock %}

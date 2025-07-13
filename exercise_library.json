@@ -1,0 +1,83 @@
+[
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Cycling",
+      "duration_min": 30,
+      "calories_burned": 240.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Elliptical",
+      "duration_min": 30,
+      "calories_burned": 270.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Hiking",
+      "duration_min": 30,
+      "calories_burned": 210.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Indoor cycling",
+      "duration_min": 30,
+      "calories_burned": 300.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Mountain biking",
+      "duration_min": 30,
+      "calories_burned": 320.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Running",
+      "duration_min": 30,
+      "calories_burned": 400.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Swimming",
+      "duration_min": 30,
+      "calories_burned": 350.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Treadmill",
+      "duration_min": 30,
+      "calories_burned": 330.0
+    }
+  },
+  {
+    "model": "training.exercise",
+    "fields": {
+      "user": null,
+      "name": "Walking",
+      "duration_min": 30,
+      "calories_burned": 150.0
+    }
+  }
+]

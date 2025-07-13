@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Select a Session to Add Exercise</h2>
+<ul>
+    {% for session in sessions %}
+        <li>
+            <a href="{% url 'add_session_exercise' session.id %}">
+                {{ session.name }}
+            </a>
+        </li>
+    {% empty %}
+        <li>No sessions found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

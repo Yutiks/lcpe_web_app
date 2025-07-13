@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Units and formats" %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/units_and_formats.css' %}?v=1.0">
+{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <h1>{% trans "Units and formats" %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="setting-group">
+            <label>{% trans "Height" %}</label>
+            <select name="height_unit">
+                {% for key, label in height_units %}
+                    <option value="{{ key }}" {% if user_settings.height_unit == key %}selected{% endif %}>{% trans label %}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>{% trans "Weight" %}</label>
+            <select name="weight_unit">
+                {% for key, label in weight_units %}
+                    <option value="{{ key }}" {% if user_settings.weight_unit == key %}selected{% endif %}>{% trans label %}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>{% trans "Energy" %}</label>
+            <select name="energy_unit">
+                {% for key, label in energy_units %}
+                    <option value="{{ key }}" {% if user_settings.energy_unit == key %}selected{% endif %}>{% trans label %}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>{% trans "Water" %}</label>
+            <select name="water_unit">
+                {% for key, label in water_units %}
+                    <option value="{{ key }}" {% if user_settings.water_unit == key %}selected{% endif %}>{% trans label %}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>{% trans "Date format" %}</label>
+            <select name="date_format">
+                {% for key, label in date_formats %}
+                    <option value="{{ key }}" {% if user_settings.date_format == key %}selected{% endif %}>{% trans label %}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>{% trans "Time format" %}</label>
+            <select name="time_format">
+                {% for key, label in time_formats %}
+                    <option value="{{ key }}" {% if user_settings.time_format == key %}selected{% endif %}>{% trans label %}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>{% trans "Week starts on" %}</label>
+            <select name="week_start">
+                {% for key, label in week_starts %}
+                    <option value="{{ key }}" {% if user_settings.week_start == key %}selected{% endif %}>{% trans label %}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit">{% trans "Save settings" %}</button>
+    </form>
+</div>
+{% endblock %}

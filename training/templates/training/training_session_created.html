@@ -1,0 +1,13 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>{% trans "Session Created" %}</title>
+</head>
+<body>
+<h1>{% trans "Training Session Created!" %}</h1>
+<p>{% trans "Your session" %} "{{ session.name }}" {% trans "has been saved." %}</p>
+<a href="{% url 'add_session_exercise' session.id %}">{% trans "Add Exercise" %}</a>
+</body>
+</html>

@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diary</title>
+    <link rel="icon" href="{% static 'images/favicon.PNG' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        main { font-family: Arial, sans-serif; margin: 100px; }
+        .nav-arrows { display: flex; justify-content: center; gap: 100px; font-size: 1.5em; }
+        .section { margin-bottom: 30px; }
+        .meal { font-weight: bold; margin-top: 10px; }
+        .add-btn { color: blue; cursor: pointer; display: block; margin-top: 5px; }
+        .water-container { text-align: center; }
+        .water-progress { width: 100%; background: #e0e0e0; height: 20px; border-radius: 4px; margin-bottom: 10px; }
+        .water-bar { height: 100%; background: #00bfff; border-radius: 4px; }
+        .water-controls button { font-size: 1.2em; padding: 5px 15px; }
+        .macro-container {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+    }
+
+    .macro-bar {
+        width: 400px;
+        text-align: center;
+    }
+
+    .macro-bar > div:first-child {
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .progress {
+        height: 14px;
+        background-color: #e9ecef;
+        border-radius: 7px;
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+    .progress-bar {
+        height: 100%;
+        line-height: 14px;
+        font-size: 12px;
+        border-radius: 7px;
+    }
+
+    </style>
+</head>
+<body>
+    <header>
+        {% include 'header.html' %}
+    </header>
+    <main>
+        <div class="nav-arrows mb-4">
+            <a href="?date={{ prev_date }}"> &lt; </a>
+            <span id="date-display">{{ current_date|date:"j, F Y" }}</span>
+            <a href="?date={{ next_date }}"> &gt; </a>
+        </div>
+
+        <div class="macro-container">
+            <div class="macro-bar">
+                <div>Carbs: {{ carbs }} / {{ carbs_goal }}g</div>
+                <div class="progress">
+                    <div class="progress-bar bg-info" style="width: {{ carbs_percentage|floatformat:0 }}%; background: #17a2b8;"></div>
+                </div>
+            </div>
+
+            <div class="macro-bar">
+                <div>Protein: {{ protein }} / {{ protein_goal }}g</div>
+                <div class="progress">
+                    <div class="progress-bar bg-success" style="width: {{ protein_percentage|floatformat:0 }}%; background: #28a745;"></div>
+                </div>
+            </div>
+
+            <div class="macro-bar">
+                <div>Fat: {{ fat }} / {{ fat_goal }}g</div>
+                <div class="progress">
+                    <div class="progress-bar bg-warning" style="width: {{ fat_percentage|floatformat:0 }}%; background: #ffc107;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kcal-bar">
+            <div>{{ energy_unit_label|title }}: {{ energy }} / {{ bmr }}{{ energy_unit_label }}</div>
+            <div class="progress kcal-progress">
+                <div class="progress-bar bg-danger" style="width: {{ energy_percentage|floatformat:0 }}%; background: #dc3545;"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            {% for entry in meals %}
+                <div class="meal">{{ entry.meal.name }}</div>
+                {% if entry.items.all %}
+                    <ul>
+                        {% for item in entry.food_items %}
+                            {% with food=item.food_or_recipe %}
+                                {% if food %}
+                                    <li>
+                                        <a href="{% url 'food_detail' food.id %}" style="text-decoration: none; font-weight: 500;">
+                                            {{ food.description }}
+                                        </a> —
+                                        {{ food.calories }} {{ energy_unit_label }} |
+                                        C: {{ food.carbohydrate }} |
+                                        P: {{ food.protein }} |
+                                        F: {{ food.fat }}
+                                        <form method="post" action="{% url 'meal_entry_remove_food' entry.id food.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="date" value="{{ current_date }}">
+                                            <button type="submit" style="color:red; background:none; border:none; cursor:pointer;">delete</button>
+                                        </form>
+                                    </li>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p><em>No food yet.</em></p>
+                {% endif %}
+                <a class="add-btn" href="{% url 'meal_entry_add_food' entry.id %}?date={{ current_date }}">+ Add food</a>
+
+                {% if show_meal_time %}
+                    {% if not entry.time %}
+                        <a class="add-btn" href="{% url 'set_meal_time' entry.id %}">Set time</a>
+                    {% else %}
+                        <a class="add-btn" href="{% url 'set_meal_time' entry.id %}">
+                            {{ entry.time|time:"H:i" }}
+                        </a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if show_exercise %}
+            <div class="section">
+                <div class="meal">Exercise</div>
+                {% for exercise in exercises %}
+                    <div>
+                        <a href="{% url 'exercise_detail' exercise.id %}" style="text-decoration: none; font-weight: 500;">
+                            {{ exercise.name }}
+                        </a> —
+                        {{ exercise.duration_min }} min |
+                        {{ exercise.calories_burned }} kcal
+                        <form method="post" action="{% url 'remove_exercise' exercise.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="date" value="{{ current_date }}">
+                            <button type="submit" style="color:red; background:none; border:none; cursor:pointer;">delete</button>
+                        </form>
+                    </div>
+                {% empty %}
+                    <div>No exercises logged</div>
+                {% endfor %}
+                <a class="add-btn" href="{% url 'add_exercise_to_diary' %}?date={{ current_date }}">+ Add exercise</a>
+            </div>
+        {% endif %}
+
+        <!-- Вода — интерактивная с Alpine.js -->
+
+        {% if show_water %}
+            <div
+                class="section water-container"
+                x-data="waterTracker({{ water_display }}, {{ water_goal_display }}, '{{ current_date|date:"Y-m-d" }}')"
+            >
+                <div>Water — <span x-text="percentage + '%'"></span></div>
+                <div><span x-text="water"></span>/<span x-text="goal"></span> {{ water_unit }}</div>
+                <div class="water-progress">
+                    <div class="water-bar" :style="'width: ' + percentage + '%'"></div>
+                </div>
+                <div class="water-controls">
+                    <button @click="update('minus')">-</button>
+                    <span>{{ label }}</span>
+                    <button @click="update('plus')">+</button>
+                </div>
+            </div>
+        {% endif %}
+    </main>
+
+    <script>
+        function waterTracker(initial, goal, date) {
+            return {
+                water: initial,
+                goal: goal,
+                get percentage() {
+                    return Math.min(100, Math.round(this.water / this.goal * 100));
+                },
+                update(action) {
+                    fetch(`/diary/update_water/${action}/?date=${date}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        this.water = data.water;
+                        this.goal = data.goal;
+                    })
+                }
+            }
+        }
+    </script>
+    <script>
+        const currentDate = new Date("{{ current_date }}");
+        if (isNaN(currentDate)) {
+            console.error("Invalid date:", "{{ current_date }}");
+        } else {
+            console.log(currentDate.toDateString());
+        }
+    </script>
+</body>
+</html>

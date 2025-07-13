@@ -1,0 +1,18 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Edit Food" %}</title>
+</head>
+<body>
+    <h1>{% trans "Edit Food:" %} {{ food.description }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% trans "Save" %}</button>
+        <a href="{% url 'food_detail' food.pk %}">{% trans "Cancel" %}</a>
+    </form>
+</body>
+</html>

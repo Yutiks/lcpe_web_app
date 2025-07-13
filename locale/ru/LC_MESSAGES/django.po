@@ -1,0 +1,277 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: LCPE\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-13 00:32+0100\n"
+"PO-Revision-Date: 2025-06-12 19:00+0100\n"
+"Last-Translator: Yusuf\n"
+"Language-Team: Russian <youremail@example.com>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: lcpe/templates/home.html:8
+msgid "LCPE Web App"
+msgstr "Веб-приложение LCPE"
+
+#: lcpe/templates/home.html:21
+msgid "LCPE Web App. All rights reserved."
+msgstr "Веб-приложение LCPE. Все права защищены."
+
+#: lcpe/templates/profile.html:8
+msgid "Profile - LCPE"
+msgstr "Профиль — LCPE"
+
+#: lcpe/templates/profile.html:15
+msgid "Profile"
+msgstr "Профиль"
+
+#: lcpe/templates/profile.html:19
+msgid "Height (cm)"
+msgstr "Рост (см)"
+
+#: lcpe/templates/profile.html:20
+msgid "Enter your height"
+msgstr "Введите ваш рост"
+
+#: lcpe/templates/profile.html:22
+msgid "Weight (kg)"
+msgstr "Вес (кг)"
+
+#: lcpe/templates/profile.html:23
+msgid "Enter your weight"
+msgstr "Введите ваш вес"
+
+#: lcpe/templates/profile.html:25
+msgid "Gender"
+msgstr "Пол"
+
+#: lcpe/templates/profile.html:27
+msgid "Male"
+msgstr "Мужской"
+
+#: lcpe/templates/profile.html:28
+msgid "Female"
+msgstr "Женский"
+
+#: lcpe/templates/profile.html:31
+msgid "Age"
+msgstr "Возраст"
+
+#: lcpe/templates/profile.html:32
+msgid "Enter your age"
+msgstr "Введите ваш возраст"
+
+#: lcpe/templates/profile.html:34
+#, fuzzy
+#| msgid "Activity and Goals"
+msgid "Activity"
+msgstr "Активность"
+
+#: lcpe/templates/profile.html:36
+msgid "Low - Little or no exercise"
+msgstr "Низкая — Минимальная или отсутствующая активность"
+
+#: lcpe/templates/profile.html:37
+msgid "Moderate - Light exercise, sport 1-3 times per week"
+msgstr "Умеренная — Лёгкие занятия, спорт 1–3 раза в неделю"
+
+#: lcpe/templates/profile.html:38
+msgid "High - Moderate exercise, sport 3-5 times per week"
+msgstr "Высокая — Умеренные занятия, спорт 3–5 раз в неделю"
+
+#: lcpe/templates/profile.html:39
+msgid "Very high - Intense exercise, sports 6-7 days a week"
+msgstr "Очень высокая — Интенсивные занятия, спорт 6–7 дней в неделю"
+
+#: lcpe/templates/profile.html:40
+msgid ""
+"Hyperactive - Very intense exercise, physical work, 2 hours or more sports"
+msgstr "Гиперактивная — Очень интенсивные занятия, физическая работа или спорт более 2 часов"
+
+#: lcpe/templates/profile.html:43
+msgid "Goal"
+msgstr "Цель"
+
+#: lcpe/templates/profile.html:45
+#, python-format
+msgid "Lose weight - Decrease your caloric requirement by 20%%"
+msgstr "Похудеть — Уменьшить суточную норму калорий на 20%%"
+
+#: lcpe/templates/profile.html:46
+#, python-format
+msgid "Lose weight slowly - Decrease your caloric requirement by 10%%"
+msgstr "Похудеть медленно — Уменьшить суточную норму калорий на 10%%"
+
+#: lcpe/templates/profile.html:47
+msgid "Maintain weight - Does not alter your caloric requirement"
+msgstr "Сохранять вес — Суточная норма калорий без изменений"
+
+#: lcpe/templates/profile.html:48
+#, python-format
+msgid "Increase weight slowly - Increase your caloric requirement by 10%%"
+msgstr "Набрать вес медленно — Увеличить суточную норму калорий на 10%%"
+
+#: lcpe/templates/profile.html:49
+#, python-format
+msgid "Increase weight - Increase your caloric requirement by 20%%"
+msgstr "Набрать вес — Увеличить суточную норму калорий на 20%%"
+
+#: lcpe/templates/profile.html:53
+msgid "Save"
+msgstr "Сохранить"
+
+#: lcpe/templates/profile.html:54
+msgid "Cancel"
+msgstr "Отмена"
+
+#: lcpe/templates/set_language_and_timezone.html:8
+#, fuzzy
+#| msgid "Language & time zone"
+msgid "Language & Time Zone Settings - LCPE"
+msgstr "Настройки языка и часового пояса — LCPE"
+
+#: lcpe/templates/set_language_and_timezone.html:68
+#, fuzzy
+#| msgid "Language & time zone"
+msgid "Language & Time Zone Settings"
+msgstr "Настройки языка и часового пояса"
+
+#: lcpe/templates/set_language_and_timezone.html:70
+msgid ""
+"Choose your preferred interface language and your current time zone. These "
+"settings will help tailor the app experience for you."
+msgstr ""
+"Выберите предпочитаемый язык интерфейса и текущий часовой пояс. Эти "
+"настройки помогут адаптировать приложение под вас."
+
+#: lcpe/templates/set_language_and_timezone.html:76
+msgid "Select Language"
+msgstr "Выберите язык"
+
+#: lcpe/templates/set_language_and_timezone.html:82
+msgid "Select Time Zone"
+msgstr "Выберите часовой пояс"
+
+#: lcpe/templates/set_language_and_timezone.html:92
+#, fuzzy
+#| msgid "User Settings"
+msgid "Save Settings"
+msgstr "Сохранить настройки"
+
+#: lcpe/templates/settings.html:8
+msgid "User Settings - LCPE"
+msgstr "Настройки пользователя — LCPE"
+
+#: lcpe/templates/settings.html:101
+msgid "User Settings"
+msgstr "Настройки пользователя"
+
+#: lcpe/templates/settings.html:103
+msgid ""
+"Manage your main account settings to customize the app for yourself. Set "
+"preferred units and notifications."
+msgstr ""
+"Управляйте основными настройками своей учётной записи, чтобы сделать "
+"приложение удобным для вас. Выберите предпочитаемые единицы измерения и уведомления."
+
+#: lcpe/templates/settings.html:106
+msgid "Personalization"
+msgstr "Персонализация"
+
+#: lcpe/templates/settings.html:108
+msgid ""
+"Configure your diary, choose preferred units and data display formats for "
+"maximum comfort."
+msgstr ""
+"Настройте дневник: выберите предпочитаемые единицы и форматы отображения "
+"данных для максимального удобства."
+
+#: lcpe/templates/settings.html:112
+msgid "Diary settings"
+msgstr "Настройки дневника"
+
+#: lcpe/templates/settings.html:113
+msgid "Units and formats"
+msgstr "Единицы и форматы"
+
+#: lcpe/templates/settings.html:114
+msgid "Formula"
+msgstr "Формула"
+
+#: lcpe/templates/settings.html:117
+msgid "Notifications and Language"
+msgstr "Уведомления и язык"
+
+#: lcpe/templates/settings.html:119
+msgid ""
+"Control which notifications you want to receive and select the interface "
+"language along with the correct time zone."
+msgstr ""
+"Управляйте уведомлениями и выберите язык интерфейса вместе с правильным "
+"часовым поясом."
+
+#: lcpe/templates/settings.html:123
+msgid "Notification preferences"
+msgstr "Настройки уведомлений"
+
+#: lcpe/templates/settings.html:124
+msgid "Language & time zone"
+msgstr "Язык и часовой пояс"
+
+#: lcpe/templates/settings.html:128
+msgid "* All changes are saved automatically."
+msgstr "* Все изменения сохраняются автоматически."
+
+#: lcpe/templates/settings.html:133
+msgid "My Content"
+msgstr "Мой контент"
+
+#: lcpe/templates/settings.html:135
+msgid ""
+"Manage your personal content—from foods and recipes to exercises and goals "
+"to accurately track progress."
+msgstr ""
+"Управляйте своим личным контентом — от продуктов и рецептов до упражнений и целей для точного отслеживания прогресса."
+
+#: lcpe/templates/settings.html:138
+msgid "Nutrition"
+msgstr "Питание"
+
+#: lcpe/templates/settings.html:140
+msgid ""
+"Add and edit foods and recipes to keep an accurate food diary tailored to "
+"your needs."
+msgstr ""
+"Добавляйте и редактируйте продукты и рецепты, чтобы вести точный пищевой дневник, соответствующий вашим потребностям."
+
+#: lcpe/templates/settings.html:144
+msgid "My foods"
+msgstr "Мои продукты"
+
+#: lcpe/templates/settings.html:145
+msgid "My recipes"
+msgstr "Мои рецепты"
+
+#: lcpe/templates/settings.html:148
+msgid "Activity and Goals"
+msgstr "Активность и цели"
+
+#: lcpe/templates/settings.html:150
+msgid ""
+"Manage your workouts, set goals, and track your progress towards a healthier "
+"lifestyle."
+msgstr ""
+"Управляйте тренировками, устанавливайте цели и отслеживайте прогресс на пути к здоровому образу жизни."
+
+#: lcpe/templates/settings.html:154
+msgid "My exercises"
+msgstr "Мои упражнения"
+
+#: lcpe/templates/settings.html:155
+msgid "My goals"
+msgstr "Мои цели"

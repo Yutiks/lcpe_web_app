@@ -1,0 +1,77 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "SCAT Test" %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-3xl w-full bg-white p-8 rounded-xl shadow-lg">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-8 text-center">
+            {% trans "SCAT (Sport Competition Anxiety Test)" %}
+        </h1>
+
+        <form method="post" class="space-y-8">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name != 'notes' %}
+                    <div class="mb-6">
+                        <fieldset class="space-y-4">
+                            <legend class="text-lg font-medium text-gray-900 mb-2">
+                                {{ field.label }}
+                            </legend>
+                            {% for subwidget in field.subwidgets %}
+                                <label class="flex items-center space-x-3 bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded cursor-pointer border border-gray-200">
+                                    {{ subwidget.tag }}
+                                    <span class="text-gray-700">{{ subwidget.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </fieldset>
+                        {% if field.errors %}
+                            <p class="text-red-600 text-sm mt-2">{{ field.errors }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <div class="mb-6">
+                <label class="block text-blue-800 font-medium mb-2">{{ form.notes.label }}</label>
+                {{ form.notes }}
+                {% if form.notes.errors %}
+                    <p class="text-red-600 text-sm mt-2">{{ form.notes.errors }}</p>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                {% trans "Submit" %}
+            </button>
+        </form>
+
+        {% if score %}
+            <div class="mt-8 p-4 bg-green-50 border border-green-300 text-green-800 rounded text-center font-semibold text-lg">
+                {% trans "Your SCAT Score" %}: {{ score }}<br>
+                <strong>{% trans "Interpretation" %}:</strong> {{ interpretation }}
+            </div>
+        {% endif %}
+
+        {% if past_results %}
+            <div class="mt-8">
+                <h2 class="text-2xl font-semibold mb-4">{% trans "Past Results" %}</h2>
+                <ul class="space-y-3">
+                    {% for result in past_results %}
+                        <li class="p-4 border rounded bg-gray-100">
+                            <strong>{{ result.date }}</strong>: {{ result.score }} — {{ result.interpretation }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

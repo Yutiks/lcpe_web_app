@@ -1,0 +1,89 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "CSAI-2 Test" %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-4xl w-full bg-white p-8 rounded-xl shadow-lg">
+        <h1 class="text-3xl font-extrabold text-blue-900 mb-8 text-center">
+            {% trans "CSAI-2 (Competitive State Anxiety Inventory-2)" %}
+        </h1>
+
+        <form method="post" class="space-y-8">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name != 'notes' %}
+                    <div class="mb-6">
+                        <fieldset class="space-y-4">
+                            <legend class="text-lg font-medium text-blue-800 mb-2">{{ field.label }}</legend>
+                            {% for subwidget in field.subwidgets %}
+                                <label class="...">
+                                    {{ subwidget.tag }}
+                                    <span class="text-blue-700">{{ subwidget.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </fieldset>
+                        {% if field.errors %}
+                            <p class="text-red-600 text-sm mt-2">{{ field.errors }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <div class="mb-6">
+                <label class="block text-blue-800 font-medium mb-2">{{ form.notes.label }}</label>
+                {{ form.notes }}
+                {% if form.notes.errors %}
+                    <p class="text-red-600 text-sm mt-2">{{ form.notes.errors }}</p>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                {% trans "Submit" %}
+            </button>
+        </form>
+
+        {% if scores %}
+            <div class="mt-8 p-4 bg-blue-100 border border-blue-300 text-blue-900 rounded text-center font-semibold text-lg space-y-2">
+                <p><strong>{% trans "Cognitive Anxiety" %}:</strong> {{ scores.cognitive }}</p>
+                <p><strong>{% trans "Somatic Anxiety" %}:</strong> {{ scores.somatic }}</p>
+                <p><strong>{% trans "Self-Confidence" %}:</strong> {{ scores.confidence }}</p>
+            </div>
+        {% endif %}
+
+        {% if past_results %}
+            <div class="mt-8">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-800">{% trans "Your Previous CSAI-2 Results" %}</h2>
+                <table class="min-w-full divide-y divide-blue-200 border rounded">
+                    <thead class="bg-blue-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-blue-600 uppercase tracking-wider">{% trans "Date" %}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-blue-600 uppercase tracking-wider">{% trans "Cognitive Anxiety" %}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-blue-600 uppercase tracking-wider">{% trans "Somatic Anxiety" %}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-blue-600 uppercase tracking-wider">{% trans "Self-Confidence" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-blue-100">
+                        {% for result in past_results %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900">{{ result.date|date:"Y-m-d" }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900">{{ result.cognitive_score }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900">{{ result.somatic_score }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900">{{ result.confidence_score }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

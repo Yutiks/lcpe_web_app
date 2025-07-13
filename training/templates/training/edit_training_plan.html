@@ -1,0 +1,87 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8">
+  <title>{% trans "Edit Training Plan" %}</title>
+  <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+  <style>
+    .week-block { margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f0f0f0; }
+    .submit-btn { margin-top: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>{% trans "Edit Training Plan" %}: {{ plan.title }}</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+
+  {% for form in formset %}
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+
+    <div class="week-block">
+        <h2>{% trans "Week" %} {{ form.instance.week_number }}</h2>
+        <table>
+          <tr>
+            <th>{% trans "Day" %}</th>
+            <th>{% trans "Session" %}</th>
+            <th>{% trans "Time" %}</th>
+          </tr>
+          <tr>
+            <td>{% trans "Monday" %}</td>
+            <td>{{ form.monday }}</td>
+            <td>{{ form.monday_time }}</td>
+          </tr>
+          <tr>
+            <td>{% trans "Tuesday" %}</td>
+            <td>{{ form.tuesday }}</td>
+            <td>{{ form.tuesday_time }}</td>
+          </tr>
+          <tr>
+            <td>{% trans "Wednesday" %}</td>
+            <td>{{ form.wednesday }}</td>
+            <td>{{ form.wednesday_time }}</td>
+          </tr>
+          <tr>
+            <td>{% trans "Thursday" %}</td>
+            <td>{{ form.thursday }}</td>
+            <td>{{ form.thursday_time }}</td>
+          </tr>
+          <tr>
+            <td>{% trans "Friday" %}</td>
+            <td>{{ form.friday }}</td>
+            <td>{{ form.friday_time }}</td>
+          </tr>
+          <tr>
+            <td>{% trans "Saturday" %}</td>
+            <td>{{ form.saturday }}</td>
+            <td>{{ form.saturday_time }}</td>
+          </tr>
+          <tr>
+            <td>{% trans "Sunday" %}</td>
+            <td>{{ form.sunday }}</td>
+            <td>{{ form.sunday_time }}</td>
+          </tr>
+        </table>
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="submit-btn">{% trans "Save Changes" %}</button>
+  </form>
+  {% if form.errors %}
+  <ul class="errors">
+    {% for field, errs in form.errors.items %}
+      {% for err in errs %}
+        <li>{{ field }}: {{ err }}</li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+{% endif %}
+</body>
+</html>

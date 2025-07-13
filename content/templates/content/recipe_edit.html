@@ -1,0 +1,18 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Edit Recipe" %}</title>
+</head>
+<body>
+    <h1>{% trans "Edit Recipe:" %} {{ recipe.name }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% trans "Save" %}</button>
+        <a href="{% url 'recipe_detail' recipe.pk %}">{% trans "Cancel" %}</a>
+    </form>
+</body>
+</html>

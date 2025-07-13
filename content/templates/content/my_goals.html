@@ -1,0 +1,47 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Set Your SMART Training Goals" %}</title>
+    <link rel="icon" href="{% static 'images/favicon.PNG' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+</head>
+<body>
+    <h1>{% trans "Set Your SMART Training Goals" %}</h1>
+    <p style="text-align:center;">{% trans "Fill in three performance goals based on your training analysis." %}</p>
+
+    <form method="POST" action="/submit_goals/">
+        {% csrf_token %}
+
+        {% for i in "123" %}
+        <div class="goal-block">
+            <h2>{% trans "Goal" %} {{ i }}</h2>
+
+            <label for="goal{{ i }}_specific">{% trans "S - Specific: What exactly do you want to improve?" %}</label>
+            <input type="text" id="goal{{ i }}_specific" name="goal{{ i }}_specific"
+                   placeholder="{% trans 'E.g. I aim to improve my cardiovascular endurance.' %}">
+
+            <label for="goal{{ i }}_measurable">{% trans "M - Measurable: How will you measure success?" %}</label>
+            <input type="text" id="goal{{ i }}_measurable" name="goal{{ i }}_measurable"
+                   placeholder="{% trans 'E.g. Run 2 km without stopping.' %}">
+
+            <label for="goal{{ i }}_achievable">{% trans "A - Achievable: Is this goal within your reach?" %}</label>
+            <textarea id="goal{{ i }}_achievable" name="goal{{ i }}_achievable"
+                      placeholder="{% trans 'E.g. I already run regularly and can increase my distance gradually.' %}"></textarea>
+
+            <label for="goal{{ i }}_realistic">{% trans "R - Realistic: Does this fit your current fitness level?" %}</label>
+            <textarea id="goal{{ i }}_realistic" name="goal{{ i }}_realistic"
+                      placeholder="{% trans 'E.g. I have the time and ability to train 3x a week.' %}"></textarea>
+
+            <label for="goal{{ i }}_timebound">{% trans "T - Time-Bound: What is your deadline?" %}</label>
+            <input type="text" id="goal{{ i }}_timebound" name="goal{{ i }}_timebound"
+                   placeholder="{% trans 'E.g. By the end of the term / in 6 weeks.' %}">
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="submit-btn">{% trans "Submit Goals" %}</button>
+    </form>
+</body>
+</html>

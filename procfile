@@ -1,0 +1,1 @@
+web: gunicorn lcpe.wsgi:application --log-file -

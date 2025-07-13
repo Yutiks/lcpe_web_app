@@ -1,0 +1,68 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "My Foods" %}</title>
+    <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+    <style>
+        .exercise-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .exercise-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+
+        .add-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            font-size: 18px;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .add-button:hover {
+            background-color: #45a049;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-row">
+            <h1>{% trans "My Foods" %}</h1>
+            <a href="{% url 'add_food' %}" class="add-button">+</a>
+        </div>
+
+        {% if foods %}
+            <ul class="food-list">
+                {% for food in foods %}
+                    <li class="food-item">
+                        <a href="{% url 'food_detail' food.pk %}" style="text-decoration: none; color: inherit;">
+                            <strong>{{ food.description }}</strong><br>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>{% trans "No foods added yet." %}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

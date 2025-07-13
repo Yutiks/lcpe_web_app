@@ -1,0 +1,138 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Diary Settings" %}</title>
+    <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px; width: 19px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            max-width: 400px;
+        }
+
+        .container {
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+        }
+        .customize-meals-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .customize-meals-button:hover {
+        background-color: #45a049;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{% trans "Diary Settings" %}</h1>
+
+        <div class="setting-row">
+            <label for="id_show_water_tracker">{% trans "Show Water Tracker" %}</label>
+            <label class="switch">
+                <input type="checkbox" id="id_show_water_tracker" {% if diary_settings.show_water_tracker %}checked{% endif %}>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-row">
+            <label for="id_show_exercise_tracker">{% trans "Show Exercise Tracker" %}</label>
+            <label class="switch">
+                <input type="checkbox" id="id_show_exercise_tracker" {% if diary_settings.show_exercise_tracker %}checked{% endif %}>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-row">
+            <label for="id_show_meals_time">{% trans "Show Meals Time" %}</label>
+            <label class="switch">
+                <input type="checkbox" id="id_show_meals_time" {% if diary_settings.show_meals_time %}checked{% endif %}>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{% url 'customize_meals' %}" class="customize-meals-button">{% trans "Customize Meals" %}</a>
+    </div>
+
+    <script>
+        const csrfToken = '{{ csrf_token }}';
+
+        function updateSetting(field, value) {
+            fetch("{% url 'update_diary_setting' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ field: field, value: value })
+            });
+        }
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            input.addEventListener('change', function () {
+                updateSetting(this.id.replace('id_', ''), this.checked);
+            });
+        });
+    </script>
+</body>
+</html>

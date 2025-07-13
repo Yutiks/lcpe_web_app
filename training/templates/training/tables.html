@@ -1,0 +1,729 @@
+{% load static i18n %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Tables Dashboard" %}</title>
+    <link rel="stylesheet" href="{% static 'css/basic_styles.css' %}">
+    <style>
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #007BFF;
+            color: #007BFF;
+        }
+
+        .tab-content {
+            margin-top: 30px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        #add-session-container {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 20px;
+        }
+
+        .training-session-block {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .training-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .training-table th, .training-table td {
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            text-align: center;
+        }
+
+        .training-table th {
+            background-color: #dbeafe;
+            border: 1px solid #bfdbfe;
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+
+        .training-table td {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e3a8a;
+        }
+
+        /* Psychological Analysis buttons */
+        .psych-buttons {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .psych-button {
+            padding: 10px 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .psych-button:hover {
+            background-color: #0056b3;
+        }
+
+        .psych-test-table {
+            margin: 0 auto 40px auto;
+            max-width: 800px;
+            width: 100%;
+        }
+        .session-button {
+            padding: 8px 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+            margin-top: 20px;
+        }
+
+        .session-button:first-child {
+            margin-left: 0;
+            margin-top: 20px;
+        }
+
+        .session-button:hover {
+            background-color: #0056b3;
+        }
+        .selected-week > td {
+          background-color: #c8e6c9 !important;
+        }
+        .week-select {
+          cursor: pointer;
+          color: inherit;
+        }
+        .week-select:hover {
+          color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% include 'header.html' %}
+    </header>
+
+    <main>
+        <div class="dashboard-container">
+            <h1>{% trans "Tables Dashboard" %}</h1>
+
+            <div class="tabs">
+                <a href="#" class="tab active" data-tab="training">{% trans "Training Plan" %}</a>
+                <a href="#" class="tab" data-tab="diet">{% trans "Diet & Nutrition" %}</a>
+                <a href="#" class="tab" data-tab="psychology">{% trans "Psychological Analysis" %}</a>
+                <a href="#" class="tab" data-tab="results">{% trans "Result Table" %}</a>
+            </div>
+
+            <div id="add-session-container">
+                <button id="add-session-btn" class="session-button">{% trans "Add Session" %}</button>
+                <button id="edit-plan-btn" class="session-button">{% trans "Edit Plan" %}</button>
+                <button id="download-pdf-btn" class="session-button" style="margin-top: 20px;">Скачать PDF</button>
+            </div>
+
+            <div class="tab-content" id="training">
+                <h2>Six-Week Muscular Strength Training Plan</h2>
+
+
+                <table class="training-table">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for week in weeks %}
+                        <tr data-week-number="{{ week.week_number }}" class="{% if week.week_number == plan.current_week %}selected-week{% endif %}">
+                          <td>
+                            <span class="week-select" data-week="{{ week.week_number }}">
+                              Week {{ week.week_number }}
+                            </span>
+                          </td>
+                          <td>{{ week.monday.name|default:" " }}</td>
+                          <td>{{ week.tuesday.name|default:" " }}</td>
+                          <td>{{ week.wednesday.name|default:" " }}</td>
+                          <td>{{ week.thursday.name|default:" " }}</td>
+                          <td>{{ week.friday.name|default:" " }}</td>
+                          <td>{{ week.saturday.name|default:" " }}</td>
+                          <td>{{ week.sunday.name|default:" " }}</td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="8"><em>No weeks defined.</em></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+                <div class="training-session-block">
+                    <h3>{% trans "Muscular Strength session details" %}</h3>
+
+                    <a href="{% url 'list_sessions' %}" class="session-button" style="margin-bottom: 15px; display: inline-block;">
+                        + {% trans "Add Exercise to Session" %}
+                    </a>
+
+                    <table class="training-table">
+                        <thead>
+                            <tr>
+                                <th>Session Name</th>
+                                <th>Exercise</th>
+                                <th>No. of Sets</th>
+                                <th>No. of Reps</th>
+                                <th>% of 1RM</th>
+                                <th>Completion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for session in sessions %}
+                                {% for exercise in session.exercises.all %}
+                                    <tr>
+                                        {% if forloop.first %}
+                                            <td rowspan="{{ session.exercises.count }}">{{ session.name }}</td>
+                                        {% endif %}
+                                        <td>{{ exercise.exercise_name }}</td>
+                                        <td>{{ exercise.sets }}</td>
+                                        <td>{{ exercise.reps }}</td>
+                                        <td>{{ exercise.percentage_1rm }}%</td>
+                                        {% if forloop.first %}
+                                            <td rowspan="{{ session.exercises.count }}">{{ session.completion|default:"—" }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td>{{ session.name }}</td>
+                                        <td colspan="4"><em>No exercises added.</em></td>
+                                        <td>{{ session.completion|default:"—" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6"><em>No sessions found.</em></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="diet" style="display:none;">
+                <h2>{% trans "Diet & Nutrition (Coming Soon)" %}</h2>
+                <p>{% trans "Nutrition plans and tracking features will be available here." %}</p>
+            </div>
+
+            <div class="tab-content" id="psychology" style="display:none;">
+                <h2>{% trans "Psychological Analysis" %}</h2>
+
+                <div class="psych-buttons">
+                    <a href="{% url 'scat_test_page' %}" class="psych-button" target="_blank" rel="noopener noreferrer">SCAT</a>
+                    <a href="{% url 'csai2_test_page' %}" class="psych-button" target="_blank" rel="noopener noreferrer">CSAI-2</a>
+                    <a href="{% url 'poms_test_page' %}" class="psych-button" target="_blank" rel="noopener noreferrer">POMS</a>
+                    <a href="{% url 'teosq_test_page' %}" class="psych-button" target="_blank" rel="noopener noreferrer">TEOSQ</a>
+                </div>
+
+                <!-- Tables -->
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">SCAT Test Results</h2>
+                    <table class="training-table psych-test-table w-full" id="table-scat">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>SCAT Score (Out of 30)</th>
+                                <th>Interpretation</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in scat_results %}
+                                <tr>
+                                    <td>{{ result.date }}</td>
+                                    <td>{{ result.score }}</td>
+                                    <td>{{ result.interpretation }}</td>
+                                    <td>{{ result.notes }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="4"><em>No SCAT results yet.</em></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">CSAI-2 Test Results</h2>
+                    <table class="training-table psych-test-table w-full" id="table-csai2">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Cognitive Anxiety (9-36)</th>
+                                <th>Somatic Anxiety (9-36)</th>
+                                <th>Self-Confidence (9-36)</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in csai2_results %}
+                                <tr>
+                                    <td>{{ result.date }}</td>
+                                    <td>{{ result.cognitive_score }}</td>
+                                    <td>{{ result.somatic_score }}</td>
+                                    <td>{{ result.confidence_score }}</td>
+                                    <td>{{ result.notes }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="5"><em>No CSAI-2 results yet.</em></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">POMS Test Results</h2>
+                    <table class="training-table psych-test-table w-full" id="table-poms">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Tension</th>
+                                <th>Depression</th>
+                                <th>Anger</th>
+                                <th>Vigor</th>
+                                <th>Fatigue</th>
+                                <th>Confusion</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in poms_results %}
+                                <tr>
+                                    <td>{{ result.date }}</td>
+                                    <td>{{ result.tension_score }}</td>
+                                    <td>{{ result.depression_score }}</td>
+                                    <td>{{ result.anger_score }}</td>
+                                    <td>{{ result.vigor_score }}</td>
+                                    <td>{{ result.fatigue_score }}</td>
+                                    <td>{{ result.confusion_score }}</td>
+                                    <td>{{ result.notes }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="8"><em>No POMS results yet.</em></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">TEOSQ Test Results</h2>
+                    <table class="training-table psych-test-table w-full" id="table-teosq">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Task Orientation (Out of 20)</th>
+                                <th>Ego Orientation (Out of 20)</th>
+                                <th>Dominant Type</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in teosq_results %}
+                                <tr>
+                                    <td>{{ result.date }}</td>
+                                    <td>{{ result.task_orientation }}</td>
+                                    <td>{{ result.ego_orientation }}</td>
+                                    <td>{{ result.dominant_type }}</td>
+                                    <td>{{ result.notes }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="5"><em>No TEOSQ results yet.</em></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="results" style="display:none;">
+                <h2>{% trans "Physical Fitness Test Results" %}</h2>
+
+                <div style="margin-bottom: 15px;">
+                    <a href="{% url 'edit_results' %}?type=initial" class="btn btn-primary">
+                        Edit Initial Result
+                    </a>
+                    <a href="{% url 'edit_results' %}?type=retest" class="btn btn-secondary" style="margin-left: 10px;">
+                        Edit Retest Result
+                    </a>
+                </div>
+
+                <table class="training-table result-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Test</th>
+                            <th>Initial Result</th>
+                            <th>Norm</th>
+                            <th>Retest Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cardiovascular Endurance</td>
+                            <td>12 Minute Cooper Run</td>
+                            <td>
+                                {% with value=initial_results|get_item:"12 Minute Cooper Run" %}
+                                    {% if value %}{{ value }}m{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"12 Minute Cooper Run" %}
+                                    {% if value %}{{ value }}m{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Strength</td>
+                            <td>Standing Broad Jump</td>
+                            <td>
+                                {% with value=initial_results|get_item:"Standing Broad Jump" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"Standing Broad Jump" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Flexibility</td>
+                            <td>Sit and Reach</td>
+                            <td>
+                                {% with value=initial_results|get_item:"Sit and Reach" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"Sit and Reach" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Muscular Endurance</td>
+                            <td>Plank Hold</td>
+                            <td>
+                                {% with value=initial_results|get_item:"Plank Hold" %}
+                                    {% if value %}{{ value }}s{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"Plank Hold" %}
+                                    {% if value %}{{ value }}s{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1m Sit-up Test</td>
+                            <td>
+                                {% with value=initial_results|get_item:"1m Sit-up Test" %}
+                                    {% if value %}{{ value }} reps{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"1m Sit-up Test" %}
+                                    {% if value %}{{ value }} reps{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1m Press-up Test</td>
+                            <td>
+                                {% with value=initial_results|get_item:"1m Press-up Test" %}
+                                    {% if value %}{{ value }} reps{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"1m Press-up Test" %}
+                                    {% if value %}{{ value }} reps{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1m Squat Test</td>
+                            <td>
+                                {% with value=initial_results|get_item:"1m Squat Test" %}
+                                    {% if value %}{{ value }} reps{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"1m Squat Test" %}
+                                    {% if value %}{{ value }} reps{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Balance</td>
+                            <td>Balance</td>
+                            <td>
+                                {% with value=initial_results|get_item:"Balance" %}
+                                    {% if value %}{{ value }}s{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"Balance" %}
+                                    {% if value %}{{ value }}s{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Coordination</td>
+                            <td>Wall/Ball Toss Test</td>
+                            <td>
+                                {% with value=initial_results|get_item:"Wall/Ball Toss Test" %}
+                                    {% if value %}{{ value }} catches{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"Wall/Ball Toss Test" %}
+                                    {% if value %}{{ value }} catches{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Agility</td>
+                            <td>T-Test</td>
+                            <td>
+                                {% with value=initial_results|get_item:"T-Test" %}
+                                    {% if value %}{{ value }}s{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"T-Test" %}
+                                    {% if value %}{{ value }}s{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Power</td>
+                            <td>Vertical Jump Test</td>
+                            <td>
+                                {% with value=initial_results|get_item:"Vertical Jump Test" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"Vertical Jump Test" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Reaction Time</td>
+                            <td>Ruler Drop Test</td>
+                            <td>
+                                {% with value=initial_results|get_item:"Ruler Drop Test" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                            <td></td>
+                            <td>
+                                {% with value=retest_results|get_item:"Ruler Drop Test" %}
+                                    {% if value %}{{ value }}cm{% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+        const addSessionBtn = document.getElementById('add-session-btn');
+        const editPlanBtn = document.getElementById('edit-plan-btn');
+
+        function updateButtonsVisibility(activeTab) {
+            const show = (activeTab === 'training');
+            addSessionBtn.style.display = show ? 'inline-block' : 'none';
+            editPlanBtn.style.display = show ? 'inline-block' : 'none';
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', e => {
+                e.preventDefault();
+                const target = tab.getAttribute('data-tab');
+
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                contents.forEach(c => {
+                    c.style.display = (c.id === target) ? 'block' : 'none';
+                });
+
+                updateButtonsVisibility(target);
+            });
+        });
+
+        updateButtonsVisibility('training');
+
+        addSessionBtn.addEventListener('click', () => {
+            window.location.href = "{% url 'create_training_session' %}";
+        });
+
+        editPlanBtn.addEventListener('click', () => {
+            window.location.href = "{% url 'edit_training_plan' plan.id %}";
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+      document.getElementById('download-pdf-btn').addEventListener('click', async () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'pt', 'a4');
+        let yOffset = 20;
+
+        const tabContents = document.querySelectorAll('.tab-content');
+        let activeTab = null;
+
+        for (const tab of tabContents) {
+          if (getComputedStyle(tab).display !== 'none') {
+            activeTab = tab;
+            break;
+          }
+        }
+
+        if (!activeTab) {
+          alert('No active tab is currently visible.');
+          return;
+        }
+
+        const sectionTitle = activeTab.querySelector('h2');
+        if (sectionTitle) {
+          doc.setFontSize(18);
+          doc.text(sectionTitle.innerText, 40, yOffset);
+          yOffset += 30;
+        }
+
+        const tables = activeTab.querySelectorAll('table');
+
+        if (tables.length === 0) {
+          doc.setFontSize(12);
+          doc.text('No data available in this section.', 40, yOffset);
+        }
+
+        for (const table of tables) {
+          const canvas = await html2canvas(table, { scale: 2 });
+          const imgData = canvas.toDataURL('image/png');
+
+          const imgProps = doc.getImageProperties(imgData);
+          const pdfWidth = doc.internal.pageSize.getWidth() - 40;
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          if (yOffset + pdfHeight > doc.internal.pageSize.getHeight()) {
+            doc.addPage();
+            yOffset = 20;
+          }
+
+          doc.addImage(imgData, 'PNG', 20, yOffset, pdfWidth, pdfHeight);
+          yOffset += pdfHeight + 20;
+        }
+
+        doc.save('section_export.pdf');
+      });
+    </script>
+    <script>
+      document.querySelectorAll('.week-select').forEach(span => {
+          span.addEventListener('click', function() {
+            const weekNumber = this.dataset.week;
+
+            fetch("{% url 'update_current_week' %}", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+              },
+              body: `week_number=${weekNumber}`
+            })
+            .then(response => {
+              if (response.ok) {
+                // Убираем выделение у всех строк
+                document.querySelectorAll('tr.selected-week').forEach(row => {
+                  row.classList.remove('selected-week');
+                });
+
+                // Находим строку с нужным weekNumber и выделяем
+                const newSelectedRow = document.querySelector(`tr[data-week-number='${weekNumber}']`);
+                if (newSelectedRow) {
+                  newSelectedRow.classList.add('selected-week');
+                }
+              } else {
+                alert("Ошибка при обновлении недели.");
+              }
+            });
+          });
+        });
+    </script>
+</body>
+</html>

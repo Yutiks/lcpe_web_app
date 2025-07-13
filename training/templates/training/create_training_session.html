@@ -1,0 +1,16 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>{% trans "Create Training Session" %}</title>
+</head>
+<body>
+<h1>{% trans "Create Training Session" %}</h1>
+<form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% trans "Save Session" %}</button>
+</form>
+</body>
+</html>

@@ -7,3 +7,5 @@ django_celery_beat==2.8.1
 psycopg2-binary>=2.9
 gunicorn
 whitenoise>=6.0.0
+redis>=4.5.0
+kombu>=5.2.0
